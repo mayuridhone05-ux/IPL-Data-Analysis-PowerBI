@@ -1,57 +1,95 @@
-# IPL Data Analysis Project (Power BI)
+🏏 IPL Analytics & Strategy Dashboard
 
-## 📌 Business Objective
-The goal of this project is to analyze Indian Premier League (IPL) matches and player performances to understand what factors drive a team to win matches, ultimately helping teams optimize their match strategies using data-driven insights.
+An end-to-end business intelligence and data engineering portfolio project analyzing historical Indian Premier League (IPL) data. This project features both a robust Power BI data model and a custom-built, fully responsive interactive web application clone.
 
----
+🌐 Live Interactive Web App
 
-## 📊 Business Problems Solved
-This dashboard answers key stakeholders' questions, including:
-* Which teams perform best overall?
-* Does winning the toss significantly help in winning the match?
-* Which stadiums act as "lucky" venues for specific teams?
-* Who are the most consistent batsmen and dominant bowlers in the league?
+Don't just look at screenshots—interact with the charts, change filters, and explore the datasets in real-time right from your browser!
 
----
+➡️ 👉 CLICK HERE TO OPEN THE LIVE INTERACTIVE DASHBOARD 👈
 
-## 🛠️ Project Workflow & Technical Architecture
+📌 Project Overview & Files
 
-### 1. Data Cleaning (Power Query)
-* **Standardized Team Names:** Unified old/changed team names for accurate historical evaluation (e.g., converted "Delhi Daredevils" to "Delhi Capitals").
-* **Data Type Integrity:** Verified proper formatting for Dates, Numeric fields (Runs, Wickets), and Text fields.
-* **Null Values & Duplicates:** Handled empty records logically and eliminated redundant data rows.
+This repository contains the complete analytical lifecycle of the IPL performance dataset:
 
-### 2. Data Modeling
-Established a solid star schema layout by creating a **One-to-Many Relationship** between our primary datasets:
-`matches.id` (One) ↔ `deliveries.match_id` (Many)
+The Power BI Core: The primary desktop analysis file with advanced visual dashboards is saved as power bi project.pbix.
 
-### 3. Key Metrics Created (DAX Measures)
-* **Batting:** Total Runs, Strike Rate, Total Sixes & Fours, and Highest Individual Scores.
-* **Bowling:** Total Wickets taken, Economy Rates, and Best Bowling Figures.
-* **Team Performance:** Total Overall Wins, Toss Win %, and Win % After Winning Toss.
+The Project Workflow: A detailed breakdown of the engineering steps, data cleaning methodology, metrics design, and delivery phases is documented in ipl-project-work-flow (1).docx.
 
----
+The Custom Web App: An automated, single-page interactive replica built inside the docs/ folder to host a live GUI experience using Chart.js on GitHub Pages.
 
-## 🖥️ Dashboard Previews & Visuals
+🎯 Business Objective & Problems Solved
 
-### Dashboard 1: Team Analysis
-*Visualizes historical team success, toss win impacts, and boundaries hit by each franchise.*
+IPL franchises, coaching staff, and athletic evaluators rely heavily on objective data models to make high-stakes recruitment and on-field decisions. This dashboard answers critical stakeholder questions:
 
-![Team Analysis](./Images/team-analysis.png)
+Franchise Dominance: Which franchises perform most consistently across multiple seasons and distinct playing conditions?
 
-### Dashboard 2: Player Analysis
-*Showcases top run-scorers, leading wicket-takers, and consistent Player of the Match winners.*
+Toss Bias: How significantly does winning the toss influence match outcomes, and what is the optimal toss decision per venue?
 
-![Player Analysis](./Images/player-analysis.png)
+Venue & Ground Indexing: Which stadiums act as high-probability "lucky" venues for specific team structures?
 
-### Dashboard 3: Venue & Match Analysis
-*Highlights city-wise match distribution, toss decisions (Bat/Field), and high-performing stadiums.*
+Player Consistency: Who are the high-impact boundaries hitters (Sixes/Fours) and dominant wicket-taking bowlers?
 
-![Venue Analysis](./Images/venue-analysis.png)
+🛠️ Data Architecture & Workflow
 
----
+[Raw Datasets (Matches & Deliveries)] 
+               │
+               ▼ (Power Query / ETL)
+[Data Cleaning & Standardizing Team Names] 
+               │
+               ▼ (Star Schema Modeling)
+[Relational Model: matches.id (1) ↔ deliveries.match_id (*)]
+               │
+               ▼ (DAX Measures & Chart.js Computations)
+[Interactive GUI / Visual Presentation Layer]
 
-## 💡 Strategic Insights & Recommendations
-* **Toss Strategy:** In stadiums where the data shows chasing teams win more frequently, captains should explicitly choose to field first upon winning the toss.
-* **Squad Building:** Teams should prioritize recruiting players based on long-term performance consistency over sheer name recognition.
-* **Venue Customization:** Match tactics must change by ground, as specific stadiums heavily favor spin/pace bowlers while others are purely batting-friendly tracks.
+
+1. Robust ETL & Data Cleaning
+
+Historical Team Alignment: Standardized team naming conventions across historic years (e.g., mapped legacy "Delhi Daredevils" records into the modern "Delhi Capitals" structure to prevent split analytics).
+
+Data Type Enforcement: Verified correct metadata typing for dates, run tallies, wicket values, and text descriptors.
+
+Integrity Audits: Cleaned nested null values and removed redundant duplicate rows to preserve baseline statistics.
+
+2. Star Schema Data Modeling
+
+A highly efficient relational star schema was built by linking the core datasets together. The crucial link in our model is:
+
+Relationship: matches.id (One) ↔ deliveries.match_id (Many)
+
+This structural connection links individual ball-by-ball delivery events straight to global match results.
+
+3. Key Performance Indicators (KPIs) & Calculated Measures
+
+Batting Performance: Evaluated Strike Rates, Boundaries Hit (Total Fours/Sixes), and individual run accumulations.
+
+Bowling Performance: Quantified total Bowler Wickets, Runs Conceded, and Economy Rates ($Economy = \frac{Runs}{Overs}$).
+
+Team Strategy: Calculated overall Win Rates, Toss Win Rates, and Chase Success Indices.
+
+🖥️ Dashboard Previews & Visual Replication
+
+1. Team Analysis Page
+
+Visualizes historical franchise success, fielding/batting distributions, boundary frequency, and fielder catches.
+
+2. Player Analysis Page
+
+Tracks player longevity, top boundary contributors (sixes and fours), and consistent Match Winners.
+
+3. Venue & Match Analysis Page
+
+Displays lucky stadiums, toss outcomes, city host frequencies, and total runs trended across seasons.
+
+💡 Strategic Business Insights & Recommendations
+
+Tailor Strategy by Ground: Visualizations indicate that chasing teams have a distinct advantage in specific grounds (such as Eden Gardens and Chinnaswamy). Captains should prioritize selecting an extra bowler and electing to field first upon winning the toss in these locations.
+
+Smart Squad Building: Recruit players whose data displays high consistency coefficients over multiple seasons, rather than focusing on highly expensive marquee names whose metrics fluctuate wildly.
+
+Leverage Venue-Specific Bowl Plans: Align pace and spin ratios based on historic pitch behavior. Certain venues heavily favor defensive, slower bowling styles while others are batting-friendly express tracks.
+
+👨‍💻 Technical Deployment Note
+
+To maximize portfolio visibility, the Power BI layouts inside power bi project.pbix were recreated using standard frontend technologies (HTML5, CSS3, JavaScript, and Chart.js). This allows anyone, including recruiters without a Power BI desktop license, to interact with the responsive dashboard elements directly on the web.
