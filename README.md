@@ -36,15 +36,15 @@ Established a solid star schema layout by creating a **One-to-Many Relationship*
 
 ### Dashboard 1: Team Analysis
 *Visualizes historical team success, toss win impacts, and boundaries hit by each franchise.*
-![Team Analysis](/Images/your_team_screenshot_name.png)
+![Team Analysis](./Images/team-analysis.png)
 
 ### Dashboard 2: Player Analysis
 *Showcases top run-scorers, leading wicket-takers, and consistent Player of the Match winners.*
-![Player Analysis](IPL-Data-Analysis-PowerBI/Images/your_player_screenshot_name.png)
+![Player Analysis](./Images/player-analysis.png)
 
 ### Dashboard 3: Venue & Match Analysis
 *Highlights city-wise match distribution, toss decisions (Bat/Field), and high-performing stadiums.*
-![Venue Analysis](./Images/your_venue_screenshot_name.png)
+![Venue Analysis](./Images/venue-analysis.png)
 
 ---
 
