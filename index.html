@@ -20,11 +20,51 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+        /* Navigation Tabs mimicking Power BI Pages */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #2b6cb0;
+            padding: 10px;
+            gap: 15px;
+        }
+        .tab-button {
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .tab-button:hover {
+            background-color: #3182ce;
+        }
+        .active-tab {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            font-weight: bold;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
         }
+        .page {
+            display: none; /* Pages are hidden by default */
+            animation: fadeIn 0.4s ease-in;
+        }
+        .active-page {
+            display: block; /* Only the active page shows */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Elements */
         .filters {
             background: white;
             padding: 20px;
@@ -56,10 +96,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
             border-top: 4px solid #3182ce;
-            transition: transform 0.2s;
-        }
-        .kpi-card:hover {
-            transform: translateY(-5px);
         }
         .kpi-card h3 {
             margin: 0 0 10px 0;
@@ -77,12 +113,18 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
         }
         .chart-container {
             position: relative;
-            height: 400px;
+            height: 350px;
             width: 100%;
             margin-top: 20px;
+        }
+        .two-charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
     </style>
 </head>
@@ -93,142 +135,161 @@
         <p>Interactive Performance Tracking Portfolio</p>
     </header>
 
+    <!-- Power BI Style Page Navigation -->
+    <div class="nav-tabs">
+        <button id="btn-team" class="tab-button active-tab" onclick="switchPage('team')">Team Analysis</button>
+        <button id="btn-player" class="tab-button" onclick="switchPage('player')">Player Analysis</button>
+        <button id="btn-venue" class="tab-button" onclick="switchPage('venue')">Venue & Match Analysis</button>
+    </div>
+
     <div class="container">
-        <div class="filters">
-            <label for="teamSelect"><strong>Select Franchise Team:</strong></label>
-            <select id="teamSelect" onchange="updateDashboard()">
-                <option value="all">All Teams (Overall IPL Overview)</option>
-                <option value="MI">Mumbai Indians</option>
-                <option value="CSK">Chennai Super Kings</option>
-                <option value="RCB">Royal Challengers Bangalore</option>
-                <option value="KKR">Kolkata Knight Riders</option>
-            </select>
-        </div>
 
-        <div class="dashboard-grid">
-            <div class="kpi-card">
-                <h3>Total Matches</h3>
-                <div class="value" id="kpi-matches">756</div>
+        <!-- PAGE 1: TEAM ANALYSIS -->
+        <div id="page-team" class="page active-page">
+            <div class="filters">
+                <label for="teamSelect"><strong>Select Franchise:</strong></label>
+                <select id="teamSelect" onchange="updateTeamDashboard()">
+                    <option value="all">All Teams</option>
+                    <option value="MI">Mumbai Indians</option>
+                    <option value="CSK">Chennai Super Kings</option>
+                    <option value="RCB">Royal Challengers Bangalore</option>
+                </select>
             </div>
-            <div class="kpi-card">
-                <h3>Win Percentage</h3>
-                <div class="value" id="kpi-winrate">52.1%</div>
+            <div class="dashboard-grid">
+                <div class="kpi-card"><h3>Total Matches</h3><div class="value" id="kpi-matches">756</div></div>
+                <div class="kpi-card"><h3>Win Percentage</h3><div class="value" id="kpi-winrate">52.1%</div></div>
+                <div class="kpi-card"><h3>Toss Win %</h3><div class="value" id="kpi-toss">49.8%</div></div>
+                <div class="kpi-card"><h3>Top Run Scorer</h3><div class="value" id="kpi-batsman">Virat Kohli</div></div>
             </div>
-            <div class="kpi-card">
-                <h3>Toss Decision (Field)</h3>
-                <div class="value" id="kpi-toss">61.5%</div>
-            </div>
-            <div class="kpi-card">
-                <h3>Top Run Scorer</h3>
-                <div class="value" id="kpi-batsman">Virat Kohli</div>
+            <div class="main-content">
+                <h2 id="team-chart-title">Overall Matches Won per Season</h2>
+                <div class="chart-container"><canvas id="teamChart"></canvas></div>
             </div>
         </div>
 
-        <div class="main-content">
-            <h2 id="chart-title">Overall League Performance (Matches Won)</h2>
-            <p id="strategy-text">Across all historical IPL data, teams winning the toss choose to field first more than 60% of the time, demonstrating a massive league-wide reliance on chasing strategies.</p>
-            
-            <div class="chart-container">
-                <canvas id="performanceChart"></canvas>
+        <!-- PAGE 2: PLAYER ANALYSIS -->
+        <div id="page-player" class="page">
+            <div class="dashboard-grid">
+                <div class="kpi-card" style="border-top-color: #48bb78;"><h3>Most Runs (Overall)</h3><div class="value">V. Kohli (5412)</div></div>
+                <div class="kpi-card" style="border-top-color: #48bb78;"><h3>Most Wickets (Overall)</h3><div class="value">L. Malinga (170)</div></div>
+                <div class="kpi-card" style="border-top-color: #48bb78;"><h3>Highest Strike Rate</h3><div class="value">A. Russell</div></div>
+                <div class="kpi-card" style="border-top-color: #48bb78;"><h3>Most Sixes</h3><div class="value">C. Gayle</div></div>
+            </div>
+            <div class="main-content">
+                <h2>Top 5 Batsmen & Bowlers</h2>
+                <div class="two-charts">
+                    <div class="chart-container"><canvas id="batsmanChart"></canvas></div>
+                    <div class="chart-container"><canvas id="bowlerChart"></canvas></div>
+                </div>
             </div>
         </div>
+
+        <!-- PAGE 3: VENUE ANALYSIS -->
+        <div id="page-venue" class="page">
+            <div class="dashboard-grid">
+                <div class="kpi-card" style="border-top-color: #ed8936;"><h3>Most Used Stadium</h3><div class="value">Eden Gardens</div></div>
+                <div class="kpi-card" style="border-top-color: #ed8936;"><h3>Bat First Win %</h3><div class="value">46.2%</div></div>
+                <div class="kpi-card" style="border-top-color: #ed8936;"><h3>Field First Win %</h3><div class="value">53.8%</div></div>
+            </div>
+            <div class="main-content">
+                <h2>Toss Decisions & Stadium Match Counts</h2>
+                <div class="two-charts">
+                    <div class="chart-container"><canvas id="tossPieChart"></canvas></div>
+                    <div class="chart-container"><canvas id="venueBarChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Our Data Model (Mimicking Power BI tables)
-        const dataset = {
-            all: { 
-                matches: "756", winrate: "52.1%", toss: "61.5%", batsman: "Virat Kohli", 
-                text: "Across all historical IPL data, teams winning the toss choose to field first more than 60% of the time, demonstrating a massive league-wide reliance on chasing strategies.",
-                chartLabel: "Overall League Performance",
-                chartData: [52, 60, 58, 62, 74] // Sample data: Total wins across 5 seasons
-            },
-            MI: { 
-                matches: "187", winrate: "58.2%", toss: "56.1%", batsman: "Rohit Sharma", 
-                text: "Mumbai Indians show exceptionally high performance levels at Wankhede Stadium, particularly when defending totals above 170 runs.",
-                chartLabel: "Mumbai Indians Performance",
-                chartData: [10, 11, 12, 9, 14] 
-            },
-            CSK: { 
-                matches: "178", winrate: "59.4%", toss: "52.3%", batsman: "Suresh Raina", 
-                text: "Chennai Super Kings possess the highest overall win percentage in the league, heavily anchored by spin-bowling strategies at the MA Chidambaram Stadium.",
-                chartLabel: "Chennai Super Kings Performance",
-                chartData: [11, 9, 10, 12, 11] 
-            },
-            RCB: { 
-                matches: "181", winrate: "47.5%", toss: "54.8%", batsman: "Virat Kohli", 
-                text: "Royal Challengers Bangalore exhibits extreme boundary density metrics due to the shorter boundary dimensions at the M. Chinnaswamy Stadium.",
-                chartLabel: "Royal Challengers Bangalore Performance",
-                chartData: [6, 8, 5, 9, 7] 
-            },
-            KKR: { 
-                matches: "174", winrate: "51.1%", toss: "57.5%", batsman: "Gautam Gambhir", 
-                text: "Kolkata Knight Riders' data displays key strategic spikes during successful chasing situations orchestrated at Eden Gardens.",
-                chartLabel: "Kolkata Knight Riders Performance",
-                chartData: [8, 9, 7, 10, 8] 
-            }
+        // --- PAGE NAVIGATION LOGIC ---
+        function switchPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            // Remove highlight from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab'));
+            
+            // Show the selected page and highlight the button
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            document.getElementById('btn-' + pageId).classList.add('active-tab');
+        }
+
+        // --- TEAM DATA (PAGE 1) ---
+        const teamDataset = {
+            all: { matches: "756", winrate: "52.1%", toss: "49.8%", batsman: "Virat Kohli", chartData: [52, 60, 58, 62, 74], label: "Overall Wins" },
+            MI: { matches: "187", winrate: "58.2%", toss: "52.4%", batsman: "Rohit Sharma", chartData: [10, 11, 12, 9, 14], label: "MI Wins" },
+            CSK: { matches: "178", winrate: "59.4%", toss: "50.1%", batsman: "Suresh Raina", chartData: [11, 9, 10, 12, 11], label: "CSK Wins" },
+            RCB: { matches: "181", winrate: "47.5%", toss: "44.7%", batsman: "Virat Kohli", chartData: [6, 8, 5, 9, 7], label: "RCB Wins" }
         };
 
-        // Initialize the chart variable
-        let myChart;
-
-        // Function to draw or update the chart
-        function renderChart(dataArray) {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            
-            // If a chart already exists, destroy it before drawing a new one (prevents hovering glitches)
-            if (myChart) {
-                myChart.destroy();
-            }
-
-            myChart = new Chart(ctx, {
-                type: 'bar', // Change to 'line' or 'pie' to see different visual types!
+        let teamChartInstance;
+        function renderTeamChart(dataArray, label) {
+            const ctx = document.getElementById('teamChart').getContext('2d');
+            if (teamChartInstance) teamChartInstance.destroy();
+            teamChartInstance = new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: ['Season 1', 'Season 2', 'Season 3', 'Season 4', 'Season 5'],
-                    datasets: [{
-                        label: 'Matches Won',
-                        data: dataArray,
-                        backgroundColor: '#3182ce',
-                        borderColor: '#2b6cb0',
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }]
+                    labels: ['2015', '2016', '2017', '2018', '2019'],
+                    datasets: [{ label: label, data: dataArray, backgroundColor: '#3182ce' }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
         }
 
-        // Master function to update KPIs and the Chart when the dropdown changes
-        function updateDashboard() {
+        function updateTeamDashboard() {
             const selection = document.getElementById("teamSelect").value;
-            const data = dataset[selection];
-            
-            // Update KPIs
+            const data = teamDataset[selection];
             document.getElementById("kpi-matches").innerText = data.matches;
             document.getElementById("kpi-winrate").innerText = data.winrate;
             document.getElementById("kpi-toss").innerText = data.toss;
             document.getElementById("kpi-batsman").innerText = data.batsman;
-            
-            // Update Text
-            document.getElementById("chart-title").innerText = data.chartLabel + " (Matches Won)";
-            document.getElementById("strategy-text").innerText = data.text;
-
-            // Update Chart
-            renderChart(data.chartData);
+            document.getElementById("team-chart-title").innerText = data.label + " per Season";
+            renderTeamChart(data.chartData, data.label);
         }
 
-        // Draw the initial chart when the page first loads
+        // --- INITIALIZE STATIC CHARTS FOR PAGES 2 & 3 ---
         window.onload = function() {
-            renderChart(dataset['all'].chartData);
+            // Load Team Chart
+            renderTeamChart(teamDataset['all'].chartData, "Overall Wins");
+
+            // Load Player Charts
+            new Chart(document.getElementById('batsmanChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['V. Kohli', 'S. Raina', 'R. Sharma', 'D. Warner', 'S. Dhawan'],
+                    datasets: [{ label: 'Total Runs', data: [5412, 5368, 4898, 4706, 4579], backgroundColor: '#48bb78' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('bowlerChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['L. Malinga', 'A. Mishra', 'Harbhajan', 'P. Chawla', 'D. Bravo'],
+                    datasets: [{ label: 'Total Wickets', data: [170, 157, 150, 149, 147], backgroundColor: '#38a169' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Load Venue Charts
+            new Chart(document.getElementById('tossPieChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Field First', 'Bat First'],
+                    datasets: [{ data: [463, 293], backgroundColor: ['#ed8936', '#dd6b20'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('venueBarChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Eden Gardens', 'Wankhede', 'Chinnaswamy', 'Feroz Shah', 'Chidambaram'],
+                    datasets: [{ label: 'Matches Hosted', data: [77, 73, 73, 67, 49], backgroundColor: '#ed8936' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         };
     </script>
 </body>
