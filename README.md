@@ -5,7 +5,7 @@ An end-to-end business intelligence and data engineering portfolio project analy
 **🌐 Live Interactive Web App**
 Don't just look at screenshots—interact with the charts, change filters, and explore the datasets in real-time right from your browser!
 
-**[➡️ 👉 CLICK HERE TO OPEN THE LIVE INTERACTIVE DASHBOARD 👈](https://mayuridhone05-ux.github.io/IPL-Data-Analysis-PowerBI/)**
+**[➡️ 👉 LIVE INTERACTIVE DASHBOARD 👈](https://mayuridhone05-ux.github.io/IPL-Data-Analysis-PowerBI/)**
 
 ---
 
